@@ -1,0 +1,42 @@
+{% load static %}
+{% load socialaccount %}
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+
+<nav class="navbar">
+  <!-- Navbar Brand -->
+  <a href="{% url 'home' %}" class="navbar-brand">Sportify</a>
+
+  <!-- Navbar Toggle Button -->
+  <button class="navbar-toggle" onclick="toggleNavbar()">☰</button>
+
+  <!-- Navbar Menu -->
+  <ul class="navbar-menu" id="navbar-menu">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'teams' %}">Explore Teams</a></li>
+    {% if user.is_authenticated %}
+      <li><a href="{% url 'create_team' %}">Create a Team</a></li>
+      <li class="dropdown">
+        <a class="dropdown-toggle">{{ user.get_full_name }}</a>
+        <div class="dropdown-content">
+          <a href="{% url 'profile' %}">Account</a>
+          <a href="{% url 'dashboard' %}">Dashboard</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        </div>
+      </li>
+    {% else %}
+      <li>
+        <a href="{% provider_login_url 'google' %}?next=/load_user" class="custom-login-button">
+          Login with Google
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+<script>
+  function toggleNavbar() {
+      const menu = document.getElementById('navbar-menu');
+      menu.classList.toggle('show'); 
+  }
+</script>

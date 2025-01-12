@@ -1,0 +1,252 @@
+/* General Styling */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff; /* White background */
+  color: #002d62; /* Navy Blue Text */
+}
+
+h1, h2 {
+  margin: 0;
+  font-weight: 600;
+  color: #002d62; /* Navy Blue Text */
+}
+
+p {
+  margin: 10px 0;
+  line-height: 1.6;
+  color: #002d62; /* Navy Blue Text */
+}
+
+button, .btn-primary {
+  padding: 10px 20px;
+  background-color: #ff6600; /* Orange Buttons */
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+button:hover, .btn-primary:hover {
+  background-color: #cc5200; /* Darker Orange */
+}
+
+/* Navbar */
+.navbar {
+  background-color: #002d62; /* Navy Blue */
+  padding: 20px;
+  color: white;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar-links li {
+  display: inline-block;
+}
+
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+  color: #ff6600; /* Hover in Orange */
+}
+
+/* Welcome Section */
+.welcome-section {
+  background-image: url("{% static 'images/uva_sports_bg.png' %}"); /* Correct background image path */
+  background-size: cover;
+  background-position: center;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+
+
+.welcome-overlay {
+  background-color: rgba(255, 102, 0, 0.7); /* Semi-transparent orange */
+  padding: 20px 40px;
+  border-radius: 30px; /* Rounded corners for the beveled effect */
+  text-align: center;
+}
+
+.welcome-overlay h1 {
+  color: #002d62; /* Navy blue text */
+  font-size: 56px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+  .welcome-section {
+    height: 400px;
+  }
+
+  .welcome-overlay h1 {
+    font-size: 40px;
+  }
+}
+
+
+/* Explore Teams Section (Images on Left, Text on Right) */
+.explore-teams {
+  background-color: #ffffff;
+  color: #002d62; /* Navy Blue */
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.team-images {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
+
+.team-images img {
+  width: 150px;
+  height: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.explore-text {
+  max-width: 50%;
+  text-align: right;
+}
+
+.explore-text h2 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.explore-text p {
+  font-size: 18px;
+}
+
+/* Create a Team Section */
+.create-team {
+  background-color: #ffffff;
+  color: #002d62; /* Navy Blue Text */
+  padding: 80px 20px;
+  text-align: left;
+}
+
+.create-content {
+  max-width: 50%;
+  margin: 0;
+}
+
+.create-content h2 {
+  font-size: 40px;
+}
+
+.create-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.create-content a {
+  background-color: #ff6600; /* Orange Buttons */
+  color: white;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.create-content a:hover {
+  background-color: #cc5200;
+}
+
+/* Footer */
+footer {
+  background-color: #002d62; /* Navy Blue */
+  color: white !important; /* Ensure all text in the footer is white */
+  padding: 10px 20px; /* Thinner padding */
+  text-align: center;
+  margin-top: 20px; /* Reduce margin for compact layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+footer p {
+  margin: 5px 0; /* Reduce spacing between elements */
+  font-size: 14px; /* Keep it readable */
+  color: white !important; /* Ensure all text, including copyright, is white */
+}
+
+footer a {
+  color: white !important; /* Ensure links are also white */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-notice p {
+  color: white !important; /* Ensure all text in footer is white */
+}
+
+
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .explore-teams {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .team-images {
+    justify-content: center;
+  }
+
+  .explore-text {
+    text-align: center;
+    max-width: 100%;
+    margin-top: 20px;
+  }
+
+  .create-team {
+    text-align: center;
+  }
+
+  .create-content {
+    max-width: 100%;
+  }
+
+  
+}

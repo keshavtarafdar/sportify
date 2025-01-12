@@ -1,0 +1,88 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
+{% include 'sportify/navbar.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <div "all-content">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+  {% block content %}
+    <div class="profile-container">
+        <!-- Profile Header with Photo -->
+        <div class="profile-photo-section">
+            <img src="{{ userDjan.get_pfpURL }}" alt="Profile Picture" class="profile-picture">
+            <h2 class="section-title">Account Information</h2>
+        </div>
+
+        <div class="profile-info">
+            <label for="full_name">Full Name:</label>
+            <input type="text" id="full_name" value="{{ userDjan.get_full_name }}" disabled>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="{{ userDjan.email }}" disabled>
+
+            <label for="nickname">Nickname:</label>
+            <input type="text" id="nickname" value="{{ userDjan.nickname }}" disabled>
+
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" id="phone_number" value="{{ userDjan.phone_number }}" disabled>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" value="{{ userDjan.location }}" disabled>
+
+            <label for="bio">Bio:</label>
+            <textarea type="text" id="bio"  disabled>{{ userDjan.bio }}</textarea>
+
+            <label for="joined_date">Joined:</label>
+            <input type="text" id="joined_date" value="{{ userDjan.get_join_date }}" disabled>
+        </div>
+
+        <!-- My Teams Section -->
+        <div class="my-teams-section">
+            <h3>Their Teams</h3>
+            <ul class="team-list">
+                {% for team in userDjan.get_teams %}
+                <li class="team-item">
+                    <a href="{% url 'team_detail' team.id %}">{{ team.name }}</a>
+                </li>
+                {% empty %}
+                <li>You are not part of any teams yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+  {% endblock %}
+</body>
+<footer>
+    <p><strong>&copy; 2024 Sportify</strong></p>
+    <div class="footer-notice">
+      <p>
+        This system is a class project for CS3240 at the University of
+        Virginia.
+      </p>
+      <p>
+        The system is not monitored, and no real information should be
+        submitted.
+      </p>
+      <p>
+        If you're looking for official information, please visit the
+        <a href="https://recsports.virginia.edu/intramural-sports" target="_blank">
+          official University of Virginia Intramural Sports Page
+        </a>.
+      </p>
+    </div>
+  </footer>
+</div>
+</html>

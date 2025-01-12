@@ -1,0 +1,179 @@
+/* At the top of profile.css */
+body {
+    margin: 0; /* Remove the default 8px margin */
+    display: block;
+    font-family: Arial, sans-serif;
+}
+.container{
+    flex:1;
+}
+/* General layout */
+.profile-container {
+    max-width: 600px;
+    min-width: 500px;
+    margin: 70px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    /* font-size:16px; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+/* General textarea styling for all profile textareas */
+.profile-info textarea {
+    padding: 10px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #333;
+    resize: none;
+}
+
+.all-content{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+.profile-info textarea:disabled {
+    background-color: #f9f9f9;
+    color: #666;
+}
+.form-group textarea {
+    padding: 10px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    background-color: white;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    color: black;
+}
+/* #bio {
+    height: 40px;
+} */
+
+
+
+/* Profile photo section */
+.profile-photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #dcdcdc;
+}
+
+/* Section title styling */
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f1f1f1;
+    margin-bottom: 20px;
+}
+
+/* Profile info form styling */
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.profile-info label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile-info input[type="text"],
+.profile-info input[type="email"] {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #333;
+}
+
+.profile-info input:disabled {
+    background-color: #f9f9f9;
+    color: #666;
+}
+
+/* Button styling */
+.edit-profile-btn {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background-color: #ff6600;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background-color: #cc5200;
+}
+
+/* My Teams section */
+.my-teams-section {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.my-teams-section h3 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.team-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.team-item {
+    background-color: #f1f1f1;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.team-item a {
+    color: #002d62;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.team-item a:hover {
+    text-decoration: underline;
+}

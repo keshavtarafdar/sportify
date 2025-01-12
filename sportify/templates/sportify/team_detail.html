@@ -1,0 +1,212 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
+{% include 'sportify/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <div class="all-content">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> {{ team.name }} - Details </title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/team_detail.css' %}" />  </head>
+
+  <body>
+
+    {% block content %}
+        <div class="container mt-4">
+        <div class="team-header">
+            <h6>
+                <span class="badge bg-orange ms-2">{{ team.associated_sport }}</span>
+            </h6>
+            <h1>
+                <span>{{ team.name }}</span>
+            </h1>
+
+            <div class="team-info">
+                <p class="team-owner">
+                    <strong>Owner:</strong> {{ team.owner.get_full_name }}
+                </p>
+    
+                <p class="team-members">
+                    <strong>Number of Members:</strong> {{ team.members.count }}
+                </p>
+            </div>            
+
+            <!-- Owner-exclusive buttons for editing and deleting team-->
+            {% if userDjan == team.get_owner %}
+                <a href="{% url 'edit_team' team.pk %}" class="btn btn-primary">Edit Team</a>
+            {% else %}
+                <a href="{% url 'leave_team' team.pk %}" class="btn btn-danger">Leave Team</a>
+            {% endif %}
+            {% if userDjan == team.get_owner or userDjan.is_pma_administrator %}
+                <a href="{% url 'delete_team' team.pk %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this team? This action cannot be undone.');">Delete Team</a>
+            {% endif %}
+        </div>
+
+        <div class="team-widgets">
+            <div class="widget">
+            <h2>Description</h2>
+            <p>{{ team.description }}</p>
+        </div>
+
+        <div class="widget">
+            <h2>Practice Schedule</h2>
+            {% if team.practice_schedule %}
+            <ul>
+                {% for session in team.practice_schedule.get_sessions %}
+                <li>
+                {{ session.day_of_week }}: {{ session.start_time }} - {{ session.end_time }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No practice schedule available.</p>
+            {% endif %}
+        </div>
+
+        <div class="widget">
+            <h2>Members</h2>
+            <ul>
+                {% for member in team.get_members %}
+                    <li>{{ member.get_full_name }}</li>
+                    <a href="{% url 'user_detail' member.pk %}" class="btn btn-primary">View Profile</a>
+                    {% if userDjan == team.get_owner and member != userDjan %}
+                        <a href="{% url 'remove_member' team.pk member.pk %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this member? It cannot be reversed, they would need to rejoin.');">Remove</a>
+                        <a href="{% url 'transfer_ownership' team.pk member.pk %}" class="btn btn-success" onclick="return confirm('Are you sure you want to transfer ownership of the team to this member? It cannot be reversed, they would need to transfer it back.');">Transfer</a>
+                        {% endif %}
+                {% endfor %}
+            </ul>
+
+            {% if userDjan == team.get_owner %}
+                <h2>Prospective Members</h2>
+                <div class="applicant-list">
+                    {% for member in team.get_prospective_members %}
+                        <div class="applicant">
+                            <p>Name: {{ member.get_full_name }}</p>
+                            <a href="{% url 'user_detail' member.pk %}" class="btn btn-primary">View Profile</a>
+                            <a href="{% url 'accept_member' team.pk member.pk %}" class="btn btn-success">Accept</a>
+                            <a href="{% url 'deny_member' team.pk member.pk %}" class="btn btn-danger">Deny</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="widget file-widget">
+            <h2>Uploaded Files</h2>
+            <input type="text" id="fileSearch" placeholder="Search files..." class="form-control mb-3" onkeyup="filterFiles()">
+            {% if files %}
+                <ul id="fileList">
+                    {% for file in files %}
+                        <li class="file-item" data-name="{{ file.name }}" data-description="{{ file.description }}" data-datetime="{{ file.upload_datetime }}" data-tags="{{ file.tags|join:', ' }}">
+                            
+                            <!-- File listing with management options and tags -->
+                            <span class="file-name">{{ file.name }}</span>
+                            <a href="{{ file.url }}" download="{{ file.name }}" class="file-action blue">Download</a>
+                            <a href="{% url 'view_content' team.id file.name %}" class="file-action blue">View</a>
+                            <a href="{% url 'delete_team_file' team.id file.name %}" class="file-action red" onclick="return confirm('Are you sure you want to delete this file?');">Delete</a>
+
+                            <div class="file-tags">
+                                {% for tag in file.tags %}
+                                    {% if tag and tag != "None" %}
+                                        <span class="file-tag">{{ tag }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No files uploaded yet.</p>
+            {% endif %}
+            <a href="{% url 'stage_file' team.id %}" class="btn btn-primary">Upload File</a>
+        </div>
+
+        <script>
+            function filterFiles() {
+                const input = document.getElementById('fileSearch');
+                const filter = input.value.toLowerCase();
+                const fileList = document.getElementById('fileList');
+                const files = fileList.getElementsByClassName('file-item');
+
+                for (let i = 0; i < files.length; i++) {
+                    const fileName = files[i].getAttribute('data-name').toLowerCase();
+                    const fileDescription = files[i].getAttribute('data-description').toLowerCase();
+                    const fileDatetime = files[i].getAttribute('data-datetime').toLowerCase();
+                    const fileTags = files[i].getAttribute('data-tags').toLowerCase();
+
+                    if (fileName.includes(filter) || fileDescription.includes(filter) || fileDatetime.includes(filter) || fileTags.includes(filter)) {
+                        files[i].style.display = "";
+                    } else {
+                        files[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
+
+        <div class="widget messages-widget">
+            <h2>Messages</h2>
+            <div class="message-container">
+                {% for message in team_messages %}
+                    <div class="message">
+                        <p>{{ message.author.get_full_name }} ({{ message.date }}): {{ message.content }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form action="{% url 'add_message' team.pk %}" method="POST">
+                {% csrf_token %}
+                <textarea name="content" class="form-control" placeholder="Enter your message here" required></textarea>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+
+            {% if userDjan == team.get_owner %}
+                <a href="{% url 'clear_messages' team.pk %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete all messages? This action cannot be undone.');">Delete All Messages</a>
+            {% endif %}
+
+            {% if team.get_message_count > 10 %}
+                <a href="?load_all=1" class="btn btn-secondary">Load All Messages</a>  <!-- Button to load all messages -->
+            {% endif %}
+        </div>
+
+
+    {% endblock %}
+  </body>
+</div>
+</div>
+<footer>
+    <p><strong>&copy; 2024 Sportify</strong></p>
+    <div class="footer-notice">
+      <p>
+        This system is a class project for CS3240 at the University of
+        Virginia.
+      </p>
+      <p>
+        The system is not monitored, and no real information should be
+        submitted.
+      </p>
+      <p>
+        If you're looking for official information, please visit the
+        <a href="https://recsports.virginia.edu/intramural-sports" target="_blank">
+          official University of Virginia Intramural Sports Page
+        </a>.
+      </p>
+    </div>
+  </footer>
+</div>
+
+</html>
+
+<style>
+    .all-content{
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+</style>
+  

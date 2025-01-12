@@ -1,0 +1,31 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
+{% include 'sportify/navbar.html' %}
+
+<!DOCTYPE html>
+<link rel="stylesheet" href="{% static 'css/login.css' %}" />
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Join UVA Sports Today!</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+
+  </head>
+  <body>
+    {% load socialaccount %}
+    <h2>Join UVA Sports Today!</h2>
+    <a href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
+
+    {% if user.is_authenticated %}
+    <p>
+      You are signed in as {{ user.first_name }} {{ user.last_name }},
+      {{user.email}}
+    </p>
+    <a href="{% url 'logout' %}">Logout</a>
+    {% endif %}
+  </body>
+</html>

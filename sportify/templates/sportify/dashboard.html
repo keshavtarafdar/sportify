@@ -1,0 +1,104 @@
+{% load static bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <!-- Bootstrap CSS -->
+    {% bootstrap_css %}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+    <div class="all-content">
+    {% include 'sportify/navbar.html' %}
+
+    <div class="container mt-5">
+        <!-- Teams I Own Section -->
+        <h2 class="section-header">Teams I Own</h2>
+        <div class="row">
+            {% if teams_owned %}
+                {% for team in teams_owned %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title d-flex align-items-center">
+                                    <span>{{ team.name }}</span>
+                                    <span class="badge bg-orange ms-2">{{ team.associated_sport }}</span>
+                                </h5>
+                                <p class="card-text">{{ team.description|truncatewords:20 }}</p>
+                                <p class="text-muted">Members: {{ team.members.count }}</p>
+                                <a href="{% url 'team_detail' team.id %}" class="btn btn-primary">View Team</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-muted">You do not own any teams.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <hr />
+
+        <!-- Teams I Am a Part Of Section -->
+        <h2 class="section-header">Teams I Am a Part Of</h2>
+        <div class="row">
+            {% if teams_member %}
+                {% for team in teams_member %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title d-flex align-items-center">
+                                    <span>{{ team.name }}</span>
+                                    <span class="badge bg-orange ms-2">{{ team.associated_sport }}</span>
+                                </h5>
+                                <p class="card-text">{{ team.description|truncatewords:20 }}</p>
+                                <p class="text-muted">Members: {{ team.members.count }}</p>
+                                <a href="{% url 'team_detail' team.id %}" class="btn btn-primary">View Team</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-muted">You are not a member of any teams.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% bootstrap_javascript %}
+    <footer>
+        <p><strong>&copy; 2024 Sportify</strong></p>
+        <div class="footer-notice">
+          <p>
+            This system is a class project for CS3240 at the University of
+            Virginia.
+          </p>
+          <p>
+            The system is not monitored, and no real information should be
+            submitted.
+          </p>
+          <p>
+            If you're looking for official information, please visit the
+            <a href="https://recsports.virginia.edu/intramural-sports" target="_blank">
+              official University of Virginia Intramural Sports Page
+            </a>.
+          </p>
+        </div>
+      </footer>
+</div>
+</body>
+</html>
+<style>
+    .all-content{
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+  
+  </style>

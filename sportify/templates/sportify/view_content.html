@@ -1,0 +1,68 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
+{% include 'sportify/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <div class="all-content">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Content</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+  </head>
+  <body>
+    
+    {% block content %}
+      <div class="container mt-4">
+        <a href="{{ file_url }}" class="btn btn-primary" download="{{ file_name }}">Download</a>
+
+        <a href="{% url 'team_detail' team.id %}" class="btn btn-primary">Go back to team page</a>
+
+        <h1>Viewing {{ file_name }}</h1>
+
+        {% if file_type == "txt" %}
+            <pre>{{ text_content }}</pre>
+        {% elif file_type == "image" %}
+            <img src="{{ file_url }}" alt="{{ file_name }}" style="max-width: 100%; height: auto;" />
+        {% elif file_type == "pdf" %}
+            {% comment %} <iframe src="{{ file_url }}" width="100%" height="800px"></iframe> {% endcomment %}
+            <iframe src="{% url 'stream_pdf' team.id file_name %}" width="100%" height="800px"></iframe>
+        
+        {% endif %}
+
+        
+      </div>
+    {% endblock %}
+  </body>
+  <footer>
+    <p><strong>&copy; 2024 Sportify</strong></p>
+    <div class="footer-notice">
+      <p>
+        This system is a class project for CS3240 at the University of
+        Virginia.
+      </p>
+      <p>
+        The system is not monitored, and no real information should be
+        submitted.
+      </p>
+      <p>
+        If you're looking for official information, please visit the
+        <a href="https://recsports.virginia.edu/intramural-sports" target="_blank">
+          official University of Virginia Intramural Sports Page
+        </a>.
+      </p>
+    </div>
+  </footer>
+</div>
+</html>
+<style>
+  .all-content{
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+  }
+</style>

@@ -1,0 +1,262 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
+{% include 'sportify/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <div class="all-content">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sportify</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/teams.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+<div class="container mt-5">
+    <div class="row">
+        <!-- Sidebar for Filters -->
+        <div class="col-md-3">
+            <div class="card shadow-sm p-3">
+                <h5 class="card-title">Filters</h5>
+
+                <!-- Filter by Number of Members -->
+                <div class="mb-4">
+                    <label class="form-label">Number of Members</label>
+                    <div class="d-flex gap-2">
+                        <input
+                            type="number"
+                            id="min-members"
+                            class="form-control"
+                            placeholder="Min"
+                            min="0"
+                            step="1"
+                        />
+                        <input
+                            type="number"
+                            id="max-members"
+                            class="form-control"
+                            placeholder="Max"
+                            min="0"
+                            step="1"
+                        />
+                    </div>
+                </div>
+
+                <!-- Filter by Sport -->
+                <div class="mb-4">
+                    <label class="form-label">Associated Sport</label>
+                    <div id="sport-filters">
+                        {% for sport in all_sports %}
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="sport-{{ sport }}"
+                                    value="{{ sport|lower }}"
+                                />
+                                <label class="form-check-label" for="sport-{{ sport }}">
+                                    {{ sport }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Filter by Practice Days -->
+                <div class="mb-4">
+                    <label class="form-label">Practice Days</label>
+                    <div id="day-filters">
+                        {% for day in practice_days %}
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="day-{{ day|lower }}"
+                                    value="{{ day|lower }}"
+                                />
+                                <label class="form-check-label" for="day-{{ day|lower }}">
+                                    {{ day }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <!-- Search Bar -->
+            <div class="mb-4">
+                <div class="input-group">
+              <span class="input-group-text" id="search-icon">
+                <i class="bi bi-search"></i>
+              </span>
+                    <input
+                        type="text"
+                        id="search-bar"
+                        class="form-control"
+                        placeholder="Search teams by name, sport, or description"
+                        aria-label="Search teams"
+                        aria-describedby="search-icon"
+                    />
+                </div>
+            </div>
+
+            <!-- My Teams Section -->
+            <h2 class="mb-4">My Teams</h2>
+            <div class="row">
+                {% if user_teams %}
+                    {% for team in user_teams %}
+                        <div class="col-md-6">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title d-flex align-items-center">
+                                        <span>{{ team.name }}</span>
+                                        <span class="badge bg-orange ms-2">{{ team.associated_sport }}</span>
+                                    </h5>
+                                    <p class="card-text">
+                                        {{ team.description|truncatewords:20 }}
+                                    </p>
+                                    <p class="card-text">Practice days: {{team.get_practice_days}}</p>
+                                    <p class="text-muted">Members: {{ team.members.count }}</p>
+                                    <a href="{% url 'team_detail' team.pk %}" class="btn btn-primary">View Team</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <p class="text-muted">You are not a part of any teams</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Explore Teams Section -->
+            <h2>Explore Teams</h2>
+            <div class="row" id="explore-teams">
+                {% for team in teams %}
+                    <div class="col-md-6 team-card"
+                         data-name="{{ team.name|lower }}"
+                         data-sport="{{ team.associated_sport|lower }}"
+                         data-members="{{ team.members.count }}"
+                         data-days="{{ team.practice_schedule.get_sessions|join:','|lower }}"
+                         data-description="{{ team.description }}">
+
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title d-flex align-items-center">
+                                    <span>{{ team.name }}</span>
+                                    <span class="badge bg-orange ms-2">{{ team.associated_sport }}</span>
+                                </h5>
+                                <p class="card-text">{{ team.description|truncatewords:20 }}</p>
+                                <p class="card-text">Practice days: {{team.get_practice_days}}</p>
+                                <p class="text-muted">Members: {{ team.members.count }}</p>
+                                {% if user.is_authenticated %}
+                                    {% if userDjan in team.members.all or userDjan.is_pma %}
+                                        <a href="{% url 'team_detail' team.pk %}" class="btn btn-primary">View Team</a>
+                                    {% else %}
+                                        <a href="{% url 'join_team' team.pk %}" class="btn btn-primary">Request to Join</a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const minMembersInput = document.getElementById('min-members');
+    const maxMembersInput = document.getElementById('max-members');
+    const searchBar = document.getElementById('search-bar');
+    const teamCards = document.querySelectorAll('.team-card');
+
+    minMembersInput.addEventListener('input', filterTeams);
+    maxMembersInput.addEventListener('input', filterTeams);
+
+    searchBar.addEventListener('input', filterTeams);
+
+    document.querySelectorAll('#sport-filters .form-check-input').forEach(checkbox => {
+        checkbox.addEventListener('change', filterTeams);
+    });
+
+    document.querySelectorAll('#day-filters .form-check-input').forEach(checkbox => {
+        checkbox.addEventListener('change', filterTeams);
+    });
+
+    function filterTeams() {
+        const query = searchBar.value.toLowerCase();
+        const selectedSports = Array.from(document.querySelectorAll('#sport-filters .form-check-input:checked')).map(
+            cb => cb.value
+        );
+        const selectedDays = Array.from(document.querySelectorAll('#day-filters .form-check-input:checked')).map(
+            cb => cb.value
+        );
+        const minMembers = parseInt(minMembersInput.value, 10) || 0; // Default to 0 if not specified
+        const maxMembers = parseInt(maxMembersInput.value, 10) || Infinity; // Default to Infinity if not specified
+
+        teamCards.forEach(card => {
+            const name = card.getAttribute('data-name');
+            const sport = card.getAttribute('data-sport');
+            const members = parseInt(card.getAttribute('data-members'), 10);
+            const days = card.getAttribute('data-days');
+            const description = card.getAttribute('data-description')
+
+            const matchesQuery = name.includes(query) || sport.includes(query) || description.includes(query);
+            const matchesSport = selectedSports.length === 0 || selectedSports.includes(sport);
+            const matchesDays = selectedDays.length === 0 || selectedDays.some(day => days.includes(day));
+            const matchesMembers = members >= minMembers && members <= maxMembers;
+
+            if (matchesQuery && matchesSport && matchesDays && matchesMembers) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>
+</body>
+<footer>
+    <p><strong>&copy; 2024 Sportify</strong></p>
+    <div class="footer-notice">
+      <p>
+        This system is a class project for CS3240 at the University of
+        Virginia.
+      </p>
+      <p>
+        The system is not monitored, and no real information should be
+        submitted.
+      </p>
+      <p>
+        If you're looking for official information, please visit the
+        <a href="https://recsports.virginia.edu/intramural-sports" target="_blank">
+          official University of Virginia Intramural Sports Page
+        </a>.
+      </p>
+    </div>
+  </footer>
+</div>
+</html>
+
+<style>
+    .all-content{
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+      
+    .bg-orange {
+        background-color: #ff8800;
+        color: white;
+        padding: 0.25em 0.75em;
+        border-radius: 999px;
+        font-size: 0.85em;
+    }
+</style>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return to Home</title>
+    
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
+    {% load static %}
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Container should take all available space */
+        .container {
+            flex: 1;
+        }
+        /* Footer */
+        footer {
+            background-color: #002d62;
+            color: white !important;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: white !important;
+        }
+
+        footer a {
+            color: white !important;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    {% include 'sportify/navbar.html' %}
+    <div class="container">
+        <h1>Uh oh!</h1>
+        <p>Something went wrong trying to login! Please press that button to return to the home page, or try logging in via the navigation bar again.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary">Return to Home</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>&copy; 2024 Sportify</strong></p>
+        <div class="footer-notice">
+          <p>
+            This system is a class project for CS3240 at the University of
+            Virginia.
+          </p>
+          <p>
+            The system is not monitored, and no real information should be
+            submitted.
+          </p>
+          <p>
+            If you're looking for official information, please visit the
+            <a href="https://recsports.virginia.edu/intramural-sports" target="_blank">
+              official University of Virginia Intramural Sports Page
+            </a>.
+          </p>
+        </div>
+      </footer>
+</body>
+</html>

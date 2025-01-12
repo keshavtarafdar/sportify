@@ -1,0 +1,100 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
+{% include 'sportify/navbar.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sportify</title>
+  <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+</head>
+
+<body>
+  {% block dynamic_styles %}
+    <style>
+      .welcome-section {
+        background-image: url("{% static 'images/uva_sports_bg.png' %}");
+      }
+    </style>
+  {% endblock %}
+  
+  {% block content %}
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+      <div class="welcome-overlay">
+        <h1>Welcome to UVA Sports</h1>
+      </div>
+    </section>
+
+    <!-- Main Sections -->
+    <section class="homepage-sections">
+      
+      <!-- Explore Teams Section -->
+      <div class="explore-teams">
+        <div class="explore-text">
+          <h2>Explore Teams</h2>
+          <p>Find the perfect team to join and start your sports journey at UVA.</p>
+          <a href="{% url 'teams' %}" class="btn-primary">View All Teams</a>
+        </div>
+        <div class="team-images">
+          {% if top_teams %}
+            {% for team in top_teams %}
+              <div class="team-card">
+                <h3>{{ team.name }}</h3>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Create Team Section -->
+      <div class="create-team">
+        <div class="create-text">
+          <h2>Create a Team</h2>
+          <p>Lead a new team and invite others to join you in UVA Sports.</p>
+        </div>
+        <div class="create-button-container">
+          <a href="{% url 'create_team' %}" class="btn-primary">Start Your Team Today</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Sports Section -->
+    <section class="featured-sports">
+      <h2>Featured Sports</h2>
+      <div class="featured-sports-images">
+        <img src="{% static 'images/climing_homepage.png' %}" alt="Climbing" class="sport-image">
+        <img src="{% static 'images/soccer_homepage.png' %}" alt="Soccer" class="sport-image">
+        <img src="{% static 'images/volleyball_homepage.png' %}" alt="Volleyball" class="sport-image">
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p><strong>&copy; 2024 Sportify</strong></p>
+      <div class="footer-notice">
+        <p>
+          This system is a class project for CS3240 at the University of
+          Virginia.
+        </p>
+        <p>
+          The system is not monitored, and no real information should be
+          submitted.
+        </p>
+        <p>
+          If you're looking for official information, please visit the
+          <a href="https://recsports.virginia.edu/intramural-sports" target="_blank">
+            official University of Virginia Intramural Sports Page
+          </a>.
+        </p>
+      </div>
+    </footer>
+  {% endblock %}
+</body>
+</html>
